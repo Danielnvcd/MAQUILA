@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagar Facturas - Empresa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Puedes reemplazar el siguiente enlace con el CSS de tu index -->
+    <link rel="stylesheet" href="estilos.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px;
+        }
+        h2 {
+            color: #2d3e50;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1e40af;
+        }
+        .success {
+            color: #16a34a;
+            text-align: center;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pagar Factura</h2>
+        <form id="pagoFacturaForm">
+            <label for="numeroFactura">Número de Factura</label>
+            <input type="text" id="numeroFactura" name="numeroFactura" required>
+
+            <label for="monto">Monto a Pagar</label>
+            <input type="number" id="monto" name="monto" min="0" step="0.01" required>
+
+            <label for="metodoPago">Método de Pago</label>
+            <select id="metodoPago" name="metodoPago" required>
+                <option value="">Seleccione</option>
+                <option value="transferencia">Transferencia Bancaria</option>
+                <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                <option value="efectivo">Efectivo</option>
+            </select>
+
+            <button type="submit">Pagar</button>
+        </form>
+        <div class="success" id="mensajeExito" style="display:none;">
+            ¡Factura pagada exitosamente!
+        </div>
+    </div>
+    <script>
+        document.getElementById('pagoFacturaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('mensajeExito').style.display = 'block';
+            this.reset();
+        });
+    </script>
+</body>
+</html>
