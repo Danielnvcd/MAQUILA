@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Proveedores - HECASA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Fonts, Bootstrap y Font Awesome -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #2c2e3c 60%, #0073ff 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-radius: 0 0 18px 18px;
+        }
+        .navbar-brand, .nav-link, .navbar-text {
+            color: #fff !important;
+            letter-spacing: 1px;
+        }
+        .card {
+            box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+            border-radius: 22px;
+            border: none;
+            animation: fadeIn 0.7s;
+            background: #fff;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .table {
+            border-radius: 14px;
+            overflow: hidden;
+            background: #f8fafd;
+        }
+        .table thead th {
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            border: none;
+            font-size: 1.05em;
+            letter-spacing: 0.5px;
+        }
+        .table-hover tbody tr:hover {
+            background: #e3eafc;
+            transition: background 0.2s;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,123,255,0.10);
+            transition: background 0.2s, transform 0.1s;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary:hover {
+            background: #006eff;
+            transform: scale(1.04);
+        }
+        .btn-warning, .btn-danger {
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+        .btn-warning {
+            background: linear-gradient(90deg, #ffc107 60%, #ff9800 100%);
+            border: none;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #ffb300;
+            color: #fff;
+        }
+        .btn-danger {
+            background: linear-gradient(90deg, #dc3545 60%, #b71c1c 100%);
+            border: none;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+            color: #fff;
+        }
+        .badge-ciudad {
+            background: linear-gradient(90deg, #17a2b8 60%, #138496 100%);
+            color: #fff;
+            font-size: 0.95em;
+            border-radius: 8px;
+            padding: 0.35em 0.7em;
+            box-shadow: 0 1px 4px rgba(23,162,184,0.08);
+        }
+        .modal-content {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(17, 17, 17, 0.13);
+            border: none;
+        }
+        .modal-header {
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            color: #fff;
+            border-radius: 18px 18px 0 0;
+        }
+        .modal-title {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px #007bff33;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #0056b3;
+        }
+        #busqueda {
+            border-radius: 12px;
+            border: 1.5px solid #e3eafc;
+            box-shadow: 0 1px 4px rgba(0,123,255,0.04);
+        }
+        .fw-bold {
+            font-weight: 600 !important;
+        }
+        footer {
+            background: #f8f9fa;
+            color: #888;
+            text-align: center;
+            padding: 1.2em 0 0.7em 0;
+            margin-top: 40px;
+            border-top: 1px solid #e3eafc;
+            font-size: 1em;
+            letter-spacing: 1px;
+        }
+        /* Sutil animación de botones */
+        .btn {
+            transition: box-shadow 0.15s, transform 0.12s;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg mb-4 shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#"><i class="fa-solid fa-cubes me-2"></i>HECASA</a>
+            <span class="navbar-text"><i class="fa-solid fa-users-gear me-2"></i>Gestión de Proveedores</span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold text-white"><i class="fa-solid fa-truck-field me-2 text-primary"></i>Proveedores</h2>
+            <button class="btn btn-primary shadow" data-bs-toggle="modal" data-bs-target="#proveedorModal">
+                <i class="fa-solid fa-plus me-1"></i>Agregar Proveedor
+            </button>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <input type="text" id="busqueda" class="form-control mb-3" placeholder="Buscar proveedor...">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="tablaProveedores">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Contacto</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Material</th>
+                                <th>Ciudad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar proveedor -->
+    <div class="modal fade" id="proveedorModal" tabindex="-1" aria-labelledby="proveedorModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form class="modal-content" id="formProveedor">
+          <div class="modal-header">
+            <h5 class="modal-title" id="proveedorModalLabel">Agregar Proveedor</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+              <input type="hidden" id="proveedorId">
+              <div class="mb-3">
+                  <label for="nombre" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="nombre" required>
+              </div>
+              <div class="mb-3">
+                  <label for="contacto" class="form-label">Contacto</label>
+                  <input type="text" class="form-control" id="contacto" required>
+              </div>
+              <div class="mb-3">
+                  <label for="telefono" class="form-label">Teléfono</label>
+                  <input type="text" class="form-control" id="telefono" required>
+              </div>
+              <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" required>
+              </div>
+              <div class="mb-3">
+                  <label for="material" class="form-label">Material</label>
+                  <input type="text" class="form-control" id="material" required>
+              </div>
+              <div class="mb-3">
+                  <label for="ciudad" class="form-label">Ciudad</label>
+                  <input type="text" class="form-control" id="ciudad" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+        <span>© 2024 HECASA | Gestión de Proveedores</span>
+    </footer>
+
+    <script>
+        // Proveedores de ejemplo
+        let proveedores = [
+            {nombre: "Maderas del Norte", contacto: "Juan Pérez", telefono: "555-1234", email: "ventas@maderasnorte.com", material: "Madera de pino", ciudad: "Monterrey"},
+            {nombre: "Herrajes y Más", contacto: "Ana López", telefono: "555-5678", email: "contacto@herrajesymas.com", material: "Herrajes", ciudad: "Guadalajara"},
+            {nombre: "Barnices Pro", contacto: "Carlos Ruiz", telefono: "555-8765", email: "info@barnicespro.com", material: "Barnices", ciudad: "CDMX"},
+            {nombre: "Tableros Express", contacto: "María Torres", telefono: "555-4321", email: "ventas@tablerosexpress.com", material: "Tableros MDF", ciudad: "Puebla"},
+            {nombre: "Espumas Flex", contacto: "Luis Gómez", telefono: "555-2468", email: "lgomez@espumasflex.com", material: "Espumas", ciudad: "León"},
+            {nombre: "Telas Decor", contacto: "Patricia Díaz", telefono: "555-1357", email: "pdiaz@telasdecor.com", material: "Telas", ciudad: "Querétaro"},
+            {nombre: "Acabados Finos", contacto: "Roberto Sánchez", telefono: "555-9753", email: "rsanchez@acabadosfinos.com", material: "Lacas y selladores", ciudad: "Toluca"},
+            {nombre: "Clavos y Tornillos SA", contacto: "Elena Martínez", telefono: "555-8642", email: "emartinez@clavostornillos.com", material: "Clavos y tornillos", ciudad: "CDMX"},
+            {nombre: "Vidrios Modernos", contacto: "Jorge Ramírez", telefono: "555-7531", email: "jramirez@vidriosmodernos.com", material: "Vidrios", ciudad: "Guadalajara"},
+            {nombre: "Plásticos del Bajío", contacto: "Sofía Herrera", telefono: "555-6420", email: "sherrera@plasticosbajio.com", material: "Plásticos", ciudad: "León"}
+        ];
+
+        function renderProveedores(filtro = "") {
+            const tbody = document.querySelector("#tablaProveedores tbody");
+            tbody.innerHTML = "";
+            proveedores
+                .map((prov, i) => ({...prov, idx: i}))
+                .filter(prov => Object.values(prov).some(val => typeof val === "string" && val.toLowerCase().includes(filtro.toLowerCase())))
+                .forEach((prov, i) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="fw-bold text-secondary">${i+1}</td>
+                            <td><i class="fa-solid fa-building fa-fw text-primary me-1"></i>${prov.nombre}</td>
+                            <td><i class="fa-solid fa-user fa-fw text-secondary me-1"></i>${prov.contacto}</td>
+                            <td><i class="fa-solid fa-phone fa-fw text-success me-1"></i>${prov.telefono}</td>
+                            <td><i class="fa-solid fa-envelope fa-fw text-danger me-1"></i>${prov.email}</td>
+                            <td><i class="fa-solid fa-boxes-stacked fa-fw text-warning me-1"></i>${prov.material}</td>
+                            <td><span class="badge badge-ciudad"><i class="fa-solid fa-city me-1"></i>${prov.ciudad}</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-warning me-1" onclick="editarProveedor(${prov.idx})" title="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarProveedor(${prov.idx})" title="Eliminar">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+        }
+
+        document.getElementById("busqueda").addEventListener("input", function() {
+            renderProveedores(this.value);
+        });
+
+        document.getElementById("formProveedor").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const id = document.getElementById("proveedorId").value;
+            const nuevoProveedor = {
+                nombre: document.getElementById("nombre").value,
+                contacto: document.getElementById("contacto").value,
+                telefono: document.getElementById("telefono").value,
+                email: document.getElementById("email").value,
+                material: document.getElementById("material").value,
+                ciudad: document.getElementById("ciudad").value
+            };
+            if (id === "") {
+                proveedores.push(nuevoProveedor);
+            } else {
+                proveedores[id] = nuevoProveedor;
+            }
+            renderProveedores();
+            bootstrap.Modal.getInstance(document.getElementById('proveedorModal')).hide();
+            this.reset();
+            document.getElementById("proveedorId").value = "";
+            document.getElementById("proveedorModalLabel").textContent = "Agregar Proveedor";
+        });
+
+        function editarProveedor(idx) {
+            const prov = proveedores[idx];
+            document.getElementById("proveedorId").value = idx;
+            document.getElementById("nombre").value = prov.nombre;
+            document.getElementById("contacto").value = prov.contacto;
+            document.getElementById("telefono").value = prov.telefono;
+            document.getElementById("email").value = prov.email;
+            document.getElementById("material").value = prov.material;
+            document.getElementById("ciudad").value = prov.ciudad;
+            document.getElementById("proveedorModalLabel").textContent = "Editar Proveedor";
+            new bootstrap.Modal(document.getElementById('proveedorModal')).show();
+        }
+
+        function eliminarProveedor(idx) {
+            if (confirm("¿Seguro que deseas eliminar este proveedor?")) {
+                proveedores.splice(idx, 1);
+                renderProveedores();
+            }
+        }
+
+        // Inicializar tabla
+        renderProveedores();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
